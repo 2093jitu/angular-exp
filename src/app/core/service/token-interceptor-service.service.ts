@@ -22,14 +22,9 @@ export class TokenInterceptorServiceService implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
 
         if (request.url.includes('refreshtoken') || request.url.includes("oauth/token")) {
-          // We do another check to see if refresh token failed
-          // In this case we want to logout user and to redirect it to login page
-
           if (request.url.includes("refreshtoken")) {
             //this.authService.logout();
           }
-
-          // return Observable.throw(error);
           return throwError(error);
         }
 
@@ -67,20 +62,17 @@ export class TokenInterceptorServiceService implements HttpInterceptor {
   }
 
   addAuthenticationToken(request) {
-    // Get access token from Local Storage
-    //this.authService.getAccessToken();
-    const accessToken = null;
+    // Get access token from Local Storage   
+    const accessToken = this.authService.getAccessToken();
     if (!accessToken) {
       return request;
     }
 
-
     // We clone the request, because the original request is immutable
     return request.clone({
       setHeaders: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${this.authService.getAccessToken()}`
       }
     });
-
   }
 }

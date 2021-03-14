@@ -1,13 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ViewCoreComponent } from './core/view-core/view-core.component';
 import { ShareModule } from './share/share.module';
-import { ShareViewComponent } from './share/share-view/share-view.component';
 import { CoreModule } from './core/core.module';
-import { EmployeeComponent } from './employee/employee/employee.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptorServiceService } from './core/service/token-interceptor-service.service'
 
 @NgModule({
   declarations: [
@@ -19,7 +17,7 @@ import { EmployeeComponent } from './employee/employee/employee.component';
     CoreModule,
     ShareModule,
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorServiceService, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

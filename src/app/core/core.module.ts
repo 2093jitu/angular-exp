@@ -5,17 +5,28 @@ import { HomeLayoutComponent } from './home-layout/home-layout.component';
 import { AuthComponent } from './auth/auth.component';
 import { LoginComponent } from './login/login.component';
 import { ShareModule } from '../share/share.module';
+import { AuthService } from './service/auth.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptorServiceService } from './service/token-interceptor-service.service';
 
 
 
 @NgModule({
   declarations: [ViewCoreComponent, HomeLayoutComponent, AuthComponent, LoginComponent],
+
   imports: [
     CoreRoutingModule,
     ShareModule
   ],
   exports: [
-    
+
+  ],
+  providers: [AuthService,
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: TokenInterceptorServiceService,
+    //   multi: true
+    // }
   ]
 })
 export class CoreModule { }
