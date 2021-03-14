@@ -6,10 +6,6 @@ import { AuthComponent } from './auth/auth.component';
 import { LoginComponent } from './login/login.component';
 import { ShareModule } from '../share/share.module';
 import { AuthService } from './service/auth.service';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptorServiceService } from './service/token-interceptor-service.service';
-
-
 
 @NgModule({
   declarations: [ViewCoreComponent, HomeLayoutComponent, AuthComponent, LoginComponent],
@@ -19,7 +15,6 @@ import { TokenInterceptorServiceService } from './service/token-interceptor-serv
     ShareModule
   ],
   exports: [
-
   ],
   providers: [AuthService,
     // {

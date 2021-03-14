@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../service/auth.service';
+import { User } from '../model/user.model';
 
 @Component({
   selector: 'app-login',
@@ -8,8 +9,8 @@ import { AuthService } from '../service/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  user: any = {};
-
+  user: User = new User();
+  
   constructor(
     private _authService: AuthService
   ) { }
@@ -18,7 +19,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('user :::: ', this.user);
     this._authService.obtainAccessToken(this.user);
   }
 

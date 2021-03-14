@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { Route } from '@angular/compiler/src/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { CustomizeCookieService } from './customize-cookie.service';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
+import { User } from '../model/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  
+
   public _isLoading = false;
 
   public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -39,7 +39,7 @@ export class AuthService {
     private cookie: CustomizeCookieService
   ) { }
 
-  obtainAccessToken(user: any) {
+  obtainAccessToken(user: User) {
     this._isLoading = true;
     this.isLoading.next(this._isLoading);
 
@@ -53,7 +53,7 @@ export class AuthService {
       'Authorization': 'Basic ' + btoa(`${this.CLIENT_ID}:${this.PASSWORD}`),
       'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'
     }
-    
+
     this.httpClient.post<any>(this.AUTH_URL, params.toString(), { headers }).pipe(
       map(res => res))
       .subscribe(
@@ -86,7 +86,7 @@ export class AuthService {
     return this.errorMgs.asObservable();
   }
 
-  saveToken(token) {    
+  saveToken(token) {
     var expireDate = token.expires_in;
     this.cookie.setWithExpiryInSeconds("access_token", token.access_token, expireDate);
     this.setUserInformation();
