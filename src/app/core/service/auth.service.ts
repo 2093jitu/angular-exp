@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { CustomizeCookieService } from './customize-cookie.service';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { User } from '../model/user.model';
 
 @Injectable({
@@ -31,6 +31,7 @@ export class AuthService {
   private CLIENT_ID = 'medClientIdPassword';
   private PASSWORD = 'secret';
   private GRANT_TYPE = 'password';
+
 
   constructor(
     private router: Router,
@@ -147,5 +148,52 @@ export class AuthService {
     } else {
       this.loggedIn.next(true);
     }
+  }
+
+  //================ For Log Out =================
+
+  logout() {
+    this.deleteToken().subscribe(
+      res => {
+        if (res.success) {
+          this.cookie.delete('access_token');
+          localStorage.clear();
+          this.router.navigate(['/']);
+        }
+        else {
+          this.cookie.delete('access_token');
+          localStorage.clear();
+          this.router.navigate(['/']);
+        }
+      },
+      error => {
+        console.log('log out error ::: ', error);
+        this.cookie.delete('access_token');
+        localStorage.clear();
+        this.router.navigate(['/']);
+      }
+    );
+  }
+
+  deleteToken(): Observable<any> {
+
+    const headers = {
+      'Authorization': 'Bearer ' + this.cookieService.get('access_token'),
+      'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'
+    }
+
+    const deleteAPIURL = `${this.BASE_URL}${this.AUTH_URL}${this.END_POINT}/logout`;
+    return this.httpClient.delete<any>(deleteAPIURL, { headers }).pipe(
+      map((res: Response) => res),
+      catchError((error: any) => {
+        return throwError(error);
+      })
+    );
+
+  }
+
+  get isLoggedIn() {
+    this.checkCredentials();
+    return this.loggedIn.asObservable();
   }
 }

@@ -6,6 +6,8 @@ import { AuthComponent } from './auth/auth.component';
 import { LoginComponent } from './login/login.component';
 import { ShareModule } from '../share/share.module';
 import { AuthService } from './service/auth.service';
+import { AuthGuard } from './guard/auth.guard';
+import { BrowserNavigationGuard } from './guard/browser-navigation.guard';
 
 @NgModule({
   declarations: [ViewCoreComponent, HomeLayoutComponent, AuthComponent, LoginComponent],
@@ -16,7 +18,10 @@ import { AuthService } from './service/auth.service';
   ],
   exports: [
   ],
-  providers: [AuthService,
+  providers: [
+    AuthService,
+    AuthGuard,
+    BrowserNavigationGuard
     // {
     //   provide: HTTP_INTERCEPTORS,
     //   useClass: TokenInterceptorServiceService,
